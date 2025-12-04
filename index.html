@@ -16,8 +16,123 @@
     <style>
       body {
         font-family: "Inter", sans-serif;
-        background-color: #1a1a2e;
+        /* CSS variable controls background scale for smooth animation */
+        --bg-scale: 1;
         color: #e0e0e0;
+        min-height: 100vh;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      /* Fixed background layer using a pseudo-element so we can scale it smoothly */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        background: linear-gradient(
+            rgba(26, 26, 46, 0.6),
+            rgba(26, 26, 46, 0.6)
+          ),
+          url("images/0785bbdbb011c8f4d27dd5cd788b3f7a.jpg") center/cover
+            no-repeat;
+        background-size: cover;
+        transform-origin: center center;
+        transform: scale(var(--bg-scale));
+        will-change: transform;
+      }
+      /* Make header a containing block for the absolute mobile menu */
+      header {
+        position: relative;
+      }
+
+      /* Mobile menu should float and not affect document flow; use max-height animation */
+      #mobile-menu {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 100%;
+        z-index: 999;
+        overflow: hidden;
+        max-height: 0;
+        opacity: 0;
+        transform: translateY(-8px);
+        transition: max-height 320ms cubic-bezier(0.2, 0.9, 0.3, 1),
+          opacity 220ms ease, transform 260ms cubic-bezier(0.2, 0.9, 0.3, 1);
+        will-change: max-height, opacity, transform;
+      }
+      #mobile-menu.open {
+        max-height: 560px; /* room for menu contents */
+        opacity: 1;
+        transform: translateY(0);
+      }
+      /* Hide the legacy mobile menu (we're using a compact dropdown instead) */
+      #mobile-menu {
+        display: none !important;
+      }
+
+      /* Compact mobile dropdown attached to the hamburger */
+      .mobile-dropdown {
+        position: absolute;
+        top: calc(100% + 8px);
+        right: 0.5rem;
+        z-index: 1200;
+        width: min(92vw, 320px);
+        background: linear-gradient(
+          180deg,
+          rgba(18, 20, 28, 0.96),
+          rgba(12, 14, 20, 0.98)
+        );
+        border: 1px solid rgba(255, 255, 255, 0.04);
+        border-radius: 10px;
+        padding: 0.5rem;
+        box-shadow: 0 10px 30px rgba(2, 6, 23, 0.6);
+        opacity: 0;
+        transform: translateY(-6px) scale(0.98);
+        pointer-events: none;
+        transition: opacity 180ms ease,
+          transform 180ms cubic-bezier(0.2, 0.9, 0.3, 1);
+      }
+      .mobile-dropdown.open {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        pointer-events: auto;
+      }
+      .mobile-dropdown .mobile-link {
+        display: block;
+        padding: 0.7rem 0.9rem;
+        color: #e6eef8;
+        font-weight: 600;
+        border-radius: 8px;
+        text-decoration: none;
+      }
+      .mobile-dropdown .mobile-link:hover {
+        background: rgba(255, 255, 255, 0.02);
+        color: #fff;
+      }
+
+      /* Mobile menu link styles to match sci-fi UI */
+      #mobile-menu .menu-links {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.75rem 1rem 1rem;
+      }
+      #mobile-menu .menu-links a {
+        width: 100%;
+        text-align: center;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #cfd3e8;
+        padding: 0.6rem 0;
+        border-radius: 8px;
+        transition: background-color 180ms, color 180ms, transform 180ms;
+      }
+      #mobile-menu .menu-links a:hover {
+        background: rgba(255, 255, 255, 0.02);
+        color: #fff;
+        transform: translateY(-2px);
       }
       .message-box {
         position: fixed;
@@ -34,15 +149,23 @@
         text-align: center;
       }
       .project-card {
-        background-color: #2e2e4e;
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        /* translucent glass look */
+        background-color: rgba(46, 46, 78, 0.24);
+        backdrop-filter: blur(8px) saturate(120%);
+        -webkit-backdrop-filter: blur(8px) saturate(120%);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        box-shadow: 0 6px 18px rgba(2, 6, 23, 0.45);
+        transition: transform 0.28s cubic-bezier(0.2, 0.9, 0.3, 1),
+          box-shadow 0.28s, background-color 0.28s;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
+        color: inherit;
       }
       .project-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+        transform: translateY(-6px);
+        box-shadow: 0 14px 34px rgba(2, 6, 23, 0.6);
+        background-color: rgba(46, 46, 78, 0.32);
       }
       .video-placeholder {
         width: 100%;
@@ -56,6 +179,444 @@
         color: #b0b0c6;
         font-style: italic;
       }
+
+      /* Typography adjustments for a sleeker sci-fi UI */
+      :root {
+        --sci-fi-base: 16px;
+      }
+
+      /* Base and weight: make text less heavy by default */
+      body {
+        font-size: var(--sci-fi-base);
+        font-weight: 400;
+        letter-spacing: 0.2px;
+      }
+
+      /* Header & nav (outside cards) — slightly smaller and less bold */
+      header > nav a,
+      header > nav .text-3xl {
+        font-weight: 600;
+      }
+      header a.text-3xl {
+        font-size: 1.125rem; /* site title */
+        font-weight: 600;
+      }
+      header nav a {
+        font-size: 0.95rem;
+        font-weight: 500;
+      }
+
+      /* Main section headings outside cards */
+      main #about h1,
+      main h1 {
+        font-size: 2rem !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.3px;
+        margin-bottom: 0.5rem;
+      }
+
+      main h2 {
+        font-size: 1.5rem !important;
+        font-weight: 600 !important;
+        margin-bottom: 0.75rem;
+      }
+
+      /* Paragraphs and smaller text outside cards */
+      main > section p,
+      #contact p,
+      footer p {
+        font-size: 1rem;
+        font-weight: 400;
+        color: #cfcfe6;
+      }
+
+      /* Keep card headings slightly bold but not oversized */
+      .project-card h3 {
+        font-size: 1.125rem !important;
+        font-weight: 600 !important;
+      }
+
+      /* Mobile adjustments */
+      @media (max-width: 640px) {
+        main #about h1 {
+          font-size: 1.6rem !important;
+        }
+        main h2 {
+          font-size: 1.25rem !important;
+        }
+        header a.text-3xl {
+          font-size: 1rem;
+        }
+      }
+
+      /* Tech stack grid */
+      .tech-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1rem;
+        max-width: 1000px;
+        margin: 0 auto;
+        align-items: stretch;
+      }
+      .tech-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.03);
+        backdrop-filter: blur(6px) saturate(120%);
+        -webkit-backdrop-filter: blur(6px) saturate(120%);
+        border: 1px solid rgba(255, 255, 255, 0.04);
+      }
+      .tech-item img {
+        width: 48px;
+        height: 48px;
+        object-fit: contain;
+        filter: invert(1) brightness(2);
+      }
+      .tech-label {
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #e8e8ff;
+        letter-spacing: 0.3px;
+      }
+      @media (max-width: 768px) {
+        .tech-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      /* About section collapsible */
+      .about-blurb {
+        max-width: 60rem;
+        margin: 0 auto;
+        position: relative;
+        overflow: hidden;
+        max-height: 6.5rem; /* show ~3 lines */
+        transition: max-height 480ms cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .about-blurb.expanded {
+        max-height: 2000px; /* large to reveal full content */
+      }
+      /* Animate inner content slightly when expanding, but keep text visible by default */
+      .about-blurb > * {
+        opacity: 1;
+        transform: translateY(0px);
+        transition: opacity 320ms ease, transform 320ms ease;
+      }
+      .about-blurb.expanded > * {
+        opacity: 1;
+        transform: translateY(0px);
+      }
+      .about-blurb::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 3rem;
+        background: linear-gradient(transparent, rgba(26, 26, 46, 0.9));
+        pointer-events: none;
+        transition: opacity 220ms ease, visibility 220ms linear;
+      }
+      .about-blurb.expanded::after {
+        opacity: 0;
+        visibility: hidden;
+      }
+      /* Desktop: make about paragraph text smaller for a tighter layout */
+      @media (min-width: 1024px) {
+        #about .about-blurb p {
+          font-size: 1rem !important;
+          line-height: 1.45 !important;
+        }
+      }
+      /* On desktop, show full About text by default and hide the Read more button */
+      @media (min-width: 1024px) {
+        .read-more-btn {
+          display: none !important;
+        }
+        #about .about-blurb {
+          max-height: 2000px !important;
+        }
+        #about .about-blurb::after {
+          display: none !important;
+        }
+      }
+      .read-more-btn {
+        display: inline-block;
+        margin-top: 0.75rem;
+        background: linear-gradient(
+          90deg,
+          rgba(124, 58, 237, 0.12),
+          rgba(124, 58, 237, 0.06)
+        );
+        color: #e8e8ff;
+        border: 1px solid rgba(124, 58, 237, 0.18);
+        padding: 0.5rem 0.9rem;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        font-weight: 600;
+        backdrop-filter: blur(6px);
+      }
+      .read-more-btn:focus {
+        outline: 2px solid rgba(124, 58, 237, 0.35);
+        outline-offset: 2px;
+      }
+
+      /* Contact section sci-fi styling */
+      #contact {
+        position: relative;
+      }
+      #contact h2 {
+        font-size: 2.2rem !important;
+        font-weight: 700 !important;
+        letter-spacing: 0.5px;
+        margin-bottom: 1rem !important;
+        text-transform: uppercase;
+        background: linear-gradient(90deg, #e8e8ff 0%, #c8c8ff 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .contact-intro {
+        font-size: 1rem !important;
+        color: #b8c5d6 !important;
+        max-width: 50rem;
+        margin: 0 auto 2.5rem;
+        letter-spacing: 0.3px;
+        line-height: 1.6;
+      }
+      .contact-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 1.5rem;
+        max-width: 900px;
+        margin: 2rem auto 0;
+        padding: 0 1rem;
+      }
+      .contact-card {
+        background: rgba(46, 46, 78, 0.18);
+        backdrop-filter: blur(10px) saturate(120%);
+        -webkit-backdrop-filter: blur(10px) saturate(120%);
+        border: 1px solid rgba(124, 58, 237, 0.15);
+        border-radius: 12px;
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+        transition: all 280ms cubic-bezier(0.2, 0.9, 0.3, 1);
+        position: relative;
+        overflow: hidden;
+      }
+      .contact-card::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          135deg,
+          rgba(124, 58, 237, 0.08) 0%,
+          transparent 100%
+        );
+        opacity: 0;
+        transition: opacity 280ms ease;
+        z-index: 0;
+      }
+      .contact-card:hover {
+        background: rgba(46, 46, 78, 0.28);
+        border-color: rgba(124, 58, 237, 0.25);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 28px rgba(124, 58, 237, 0.15);
+      }
+      .contact-card:hover::before {
+        opacity: 1;
+      }
+      .contact-card > * {
+        position: relative;
+        z-index: 1;
+      }
+      .contact-icon {
+        width: 2.5rem;
+        height: 2.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(
+          135deg,
+          rgba(124, 58, 237, 0.2),
+          rgba(168, 85, 247, 0.1)
+        );
+        border-radius: 10px;
+        border: 1px solid rgba(124, 58, 237, 0.25);
+      }
+      .contact-icon svg {
+        width: 1.25rem;
+        height: 1.25rem;
+        stroke: #e8e8ff;
+        fill: none;
+        stroke-width: 2;
+      }
+      .contact-label {
+        font-size: 0.85rem;
+        color: #9fa8b8;
+        font-weight: 600;
+        letter-spacing: 0.4px;
+        text-transform: uppercase;
+      }
+      .contact-link {
+        font-size: 1rem;
+        color: #e8e8ff;
+        font-weight: 600;
+        text-decoration: none;
+        word-break: break-word;
+        text-align: center;
+        transition: color 200ms;
+      }
+      .contact-link:hover {
+        color: #ffd6e8;
+      }
+      .contact-link:hover {
+        color: #ffd6e8;
+      }
+
+      /* Experience floating items — expand to full viewport width and larger height */
+      #experience-playfield {
+        position: relative;
+        /* stretch full-bleed while staying inside container flow */
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        /* much larger height so items can move freely on all devices */
+        min-height: 120vh;
+        max-height: none;
+        overflow: hidden;
+        padding: 3rem 0;
+        box-sizing: border-box;
+        background: transparent; /* fully transparent per request */
+        overflow-x: hidden;
+      }
+      .floating-exp {
+        position: absolute;
+        will-change: transform;
+        cursor: grab;
+        transition: box-shadow 200ms ease, transform 160ms ease;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        padding: 1rem;
+        color: #e6eef8;
+        border-radius: 12px;
+        backdrop-filter: blur(6px) saturate(120%);
+        -webkit-backdrop-filter: blur(6px) saturate(120%);
+        border: 1px solid rgba(255, 255, 255, 0.03);
+        box-shadow: 0 10px 30px rgba(2, 6, 23, 0.6);
+        background: linear-gradient(
+          180deg,
+          rgba(20, 24, 34, 0.6),
+          rgba(8, 10, 18, 0.4)
+        );
+        user-select: none;
+        touch-action: none;
+      }
+      .floating-exp:active {
+        cursor: grabbing;
+      }
+      /* square / even sizing helper — sizes set via inline CSS var --size */
+      .floating-exp.square {
+        width: var(--size, 320px);
+        height: var(--size, 320px);
+      }
+      .floating-exp .title {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: #fff;
+      }
+      .floating-exp .company {
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #cbd5e1;
+      }
+      .floating-exp .dates {
+        font-family: monospace;
+        font-size: 0.78rem;
+        color: #9aa6b6;
+        margin-top: 0.5rem;
+      }
+
+      /* pulsate on tap */
+      @keyframes pulsate {
+        0% {
+          transform: scale(1);
+          box-shadow: 0 8px 30px rgba(2, 6, 23, 0.6);
+        }
+        50% {
+          transform: scale(1.06);
+          box-shadow: 0 18px 44px rgba(2, 6, 23, 0.75);
+        }
+        100% {
+          transform: scale(1);
+          box-shadow: 0 8px 30px rgba(2, 6, 23, 0.6);
+        }
+      }
+      .floating-exp.pulsate {
+        animation: pulsate 480ms ease-in-out;
+      }
+
+      /* keep floating items active on small screens as well; no motion-reducing override */
+
+      /* Mobile: allow flexible heights and content wrapping so text doesn't overflow
+         Keep width constrained but let height grow, and allow internal scrolling */
+      @media (max-width: 768px) {
+        .floating-exp.square {
+          width: min(260px, 44vw) !important;
+          height: auto !important;
+          min-height: 140px;
+          padding: 0.9rem !important;
+          box-sizing: border-box;
+        }
+
+        /* Allow inner content to scroll if it overflows the available area */
+        .floating-exp > div {
+          max-height: calc(80vh - 4rem);
+          overflow-y: auto;
+        }
+
+        .floating-exp p,
+        .floating-exp .text-gray-300,
+        .floating-exp li {
+          word-break: break-word;
+          overflow-wrap: anywhere;
+        }
+      }
+
+      /* Mobile About section — left-aligned block text */
+      @media (max-width: 768px) {
+        #about {
+          text-align: left !important;
+        }
+        #about .flex {
+          align-items: flex-start !important;
+        }
+        #about h1 {
+          text-align: left !important;
+          font-size: 1.5rem !important;
+        }
+        .about-blurb {
+          max-width: 100% !important;
+          text-align: left !important;
+          margin: 0 !important;
+        }
+        .about-blurb p {
+          font-size: 0.95rem !important;
+          text-align: left !important;
+        }
+        .read-more-btn {
+          width: 100%;
+          text-align: center;
+        }
+      }
     </style>
   </head>
   <body class="antialiased">
@@ -63,39 +624,101 @@
     <div id="messageBox" class="message-box"></div>
 
     <!-- Header & Navigation -->
-    <header class="bg-[#1a1a2e] sticky top-0 z-50 shadow-lg">
-      <nav
-        class="container mx-auto px-6 py-4 flex justify-between items-center"
-      >
-        <a href="#" class="text-3xl font-bold text-white"> Crescent Dede </a>
-        <!-- Desktop Navigation -->
-        <div class="hidden md:flex space-x-6 text-lg font-medium">
-          <a
-            href="#about"
-            class="text-gray-300 hover:text-white transition-colors duration-300"
-            >About</a
+    <!-- Header & Navigation -->
+    <header class="sticky top-0 z-50">
+      <nav class="relative overflow-hidden">
+        <!-- Subtle header overlay (colorful blobs removed per request) -->
+        <div
+          class="absolute inset-0"
+          style="
+            opacity: 0.1;
+            background: linear-gradient(
+              180deg,
+              rgba(8, 10, 15, 0.7),
+              rgba(8, 10, 18, 0.1)
+            );
+            pointer-events: none;
+          "
+        ></div>
+        <!-- Grid pattern overlay (darker subtle lines) -->
+        <div
+          class="absolute inset-0"
+          style="
+            opacity: 0.04;
+            background-image: linear-gradient(
+                rgba(20, 23, 28, 0.08) 1px,
+                transparent 1px
+              ),
+              linear-gradient(
+                90deg,
+                rgba(20, 23, 28, 0.08) 1px,
+                transparent 1px
+              );
+            background-size: 50px 50px;
+          "
+        ></div>
+
+        <div
+          class="relative container mx-auto px-6 py-4 flex justify-between items-center"
+        >
+          <!-- Logo with sci-fi style -->
+
+          <!-- Desktop Navigation -->
+          <div
+            class="hidden md:flex space-x-1 text-base font-semibold flex-1 justify-center"
           >
-          <a
-            href="#projects"
-            class="text-gray-300 hover:text-white transition-colors duration-300"
-            >Projects</a
-          >
-          <a
-            href="#contact"
-            class="text-gray-300 hover:text-white transition-colors duration-300"
-            >Contact</a
-          >
+            <a
+              href="#about"
+              class="px-4 py-2 rounded-lg text-gray-200 hover:text-white hover:bg-white/5 transition-all duration-300 relative group"
+            >
+              About
+              <span
+                class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-slate-700 to-slate-500 group-hover:w-full transition-all duration-300"
+              ></span>
+            </a>
+            <a
+              href="#experience"
+              class="px-4 py-2 rounded-lg text-gray-200 hover:text-white hover:bg-white/5 transition-all duration-300 relative group"
+            >
+              Experience
+              <span
+                class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-slate-700 to-slate-500 group-hover:w-full transition-all duration-300"
+              ></span>
+            </a>
+            <a
+              href="#projects"
+              class="px-4 py-2 rounded-lg text-gray-200 hover:text-white hover:bg-white/5 transition-all duration-300 relative group"
+            >
+              Projects
+              <span
+                class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-slate-700 to-slate-500 group-hover:w-full transition-all duration-300"
+              ></span>
+            </a>
+            <a
+              href="#contact"
+              class="px-4 py-2 rounded-lg text-gray-200 hover:text-white hover:bg-white/5 transition-all duration-300 relative group"
+            >
+              Contact
+              <span
+                class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-slate-700 to-slate-500 group-hover:w-full transition-all duration-300"
+              ></span>
+            </a>
+          </div>
         </div>
-        <!-- Mobile Navigation Button (Hamburger) -->
+      </nav>
+      <!-- Compact Mobile Hamburger + Dropdown -->
+      <div class="relative md:hidden">
         <button
-          id="mobile-menu-button"
-          class="md:hidden text-gray-300 hover:text-white focus:outline-none"
+          id="mobile-hamburger"
+          aria-expanded="false"
+          class="text-gray-300 hover:text-white focus:outline-none p-2 rounded"
         >
           <svg
             class="h-6 w-6"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
+            aria-hidden="true"
           >
             <path
               stroke-linecap="round"
@@ -105,28 +728,11 @@
             />
           </svg>
         </button>
-      </nav>
-      <!-- Mobile Navigation Menu -->
-      <div
-        id="mobile-menu"
-        class="hidden md:hidden bg-[#1a1a2e] pb-4 shadow-lg"
-      >
-        <div class="flex flex-col items-center space-y-4 text-xl">
-          <a
-            href="#about"
-            class="text-gray-300 hover:text-white transition-colors duration-300 w-full text-center"
-            >About</a
-          >
-          <a
-            href="#projects"
-            class="text-gray-300 hover:text-white transition-colors duration-300 w-full text-center"
-            >Projects</a
-          >
-          <a
-            href="#contact"
-            class="text-gray-300 hover:text-white transition-colors duration-300 w-full text-center"
-            >Contact</a
-          >
+        <div id="mobile-dropdown" class="mobile-dropdown" aria-hidden="true">
+          <a href="#about" class="mobile-link">About</a>
+          <a href="#experience" class="mobile-link">Experience</a>
+          <a href="#projects" class="mobile-link">Projects</a>
+          <a href="#contact" class="mobile-link">Contact</a>
         </div>
       </div>
     </header>
@@ -141,24 +747,229 @@
             class="w-36 h-36 rounded-full object-cover mb-6 border-4 border-purple-400 shadow-lg"
           />
 
-          <h1 class="text-5xl font-extrabold mb-4 text-white">
-            Hello, I'm <span class="text-white">Crescent Dede</span>
-          </h1>
-          <p class="text-xl text-gray-400 max-w-2xl mx-auto leading-relaxed">
-            I'm a full-stack developer with nearly two years of professional
-            experience. My journey started at Olotu Square, where I was trained
-            in frontend development. My first full-stack role was at Ngbuka,
-            where I focused on creating technology solutions to solve local
-            problems. I am passionate about EdTech and in my free time, I enjoy
-            working with robotics and have volunteered as a robotics tutor for
-            public schools.
-          </p>
+          <!-- <h1 class="text-5xl font-extrabold mb-4 text-white"> -->
+          <span class="text-white">Crescent Dede</span>
+          <!-- </h1> -->
+          <div class="about-blurb">
+            <p class="text-xl text-gray-400 leading-relaxed px-4 py-1">
+              I’m a fullstack developer with nearly three years of combined
+              professional and hands-on experience, beginning my career in React
+              and quickly expanding into modern fullstack development. My first
+              frontend role introduced me to Next.js, where I contributed to
+              building practical, user-focused software solutions tailored to
+              real local needs. Alongside development, my passion for Linux has
+              driven me to explore server administration, networking, and
+              operating-system fundamentals, giving me a strong technical
+              foundation and the ability to understand applications from both an
+              engineering and infrastructure perspective. I bring curiosity,
+              adaptability, and a problem-solving mindset to every project I
+              work on.
+            </p>
+          </div>
+          <button class="read-more-btn" id="aboutToggle" aria-expanded="false">
+            Read more
+          </button>
+        </div>
+      </section>
+
+      <!-- Tech Stack Section -->
+      <section id="stack" class="mb-20 text-center py-12">
+        <h2 class="text-3xl font-bold text-white mb-6">Tech Stack</h2>
+        <p class="text-gray-400 mb-6 max-w-2xl mx-auto">
+          Tools and technologies I use frequently.
+        </p>
+
+        <div class="tech-grid px-6">
+          <div class="tech-item">
+            <img
+              loading="lazy"
+              src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/nextdotjs.svg"
+              alt="Next.js"
+            />
+            <div class="tech-label">Next.js</div>
+          </div>
+
+          <div class="tech-item">
+            <img
+              loading="lazy"
+              src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/nodedotjs.svg"
+              alt="Node.js"
+            />
+            <div class="tech-label">Node.js</div>
+          </div>
+
+          <div class="tech-item">
+            <img
+              loading="lazy"
+              src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/typescript.svg"
+              alt="TypeScript"
+            />
+            <div class="tech-label">TypeScript</div>
+          </div>
+
+          <div class="tech-item">
+            <img
+              loading="lazy"
+              src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/rust.svg"
+              alt="Rust"
+            />
+            <div class="tech-label">Rust</div>
+          </div>
+
+          <div class="tech-item">
+            <img
+              loading="lazy"
+              src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/python.svg"
+              alt="Python"
+            />
+            <div class="tech-label">Python</div>
+          </div>
+
+          <div class="tech-item">
+            <img
+              loading="lazy"
+              src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/express.svg"
+              alt="Express"
+            />
+            <div class="tech-label">Express</div>
+          </div>
+
+          <div class="tech-item">
+            <img
+              loading="lazy"
+              src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/postgresql.svg"
+              alt="Postgres"
+            />
+            <div class="tech-label">Postgres</div>
+          </div>
+
+          <div class="tech-item">
+            <img
+              loading="lazy"
+              src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/git.svg"
+              alt="Git"
+            />
+            <div class="tech-label">Git</div>
+          </div>
+
+          <div class="tech-item">
+            <img
+              loading="lazy"
+              src="https://cdn.jsdelivr.net/npm/simple-icons@v11/icons/docker.svg"
+              alt="Docker"
+            />
+            <div class="tech-label">Docker</div>
+          </div>
+
+          <div class="tech-item">
+            <!-- Inline fallback SVG for Gemini (branding can be replaced with official logo) -->
+            <svg
+              width="48"
+              height="48"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <circle
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="#ffffff"
+                stroke-opacity="0.9"
+                stroke-width="1.2"
+                fill="rgba(255,255,255,0.02)"
+              />
+              <path
+                d="M7 12h10M12 7v10"
+                stroke="#ffffff"
+                stroke-width="1.2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                opacity="0.95"
+              />
+            </svg>
+            <div class="tech-label">Gemini</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Experience Section -->
+      <section id="experience" class="mb-20">
+        <h2 class="text-4xl font-bold text-center mb-12 text-white">
+          Experience
+        </h2>
+        <div id="experience-playfield" class="relative mx-auto">
+          <!-- Floating experience items: JS will animate these to move and bounce -->
+          <div
+            class="floating-exp square"
+            id="exp-olotu"
+            style="--size: 320px; left: 8%; top: 12%"
+          >
+            <div>
+              <div class="title">Fullstack Trainee</div>
+              <div class="company">Olotu Square Software</div>
+              <div class="dates">April 2023</div>
+              <hr class="my-2 border-white/5" />
+              <div class="text-gray-300 text-sm">
+                Worked on a collaborative project – ticketing web app for Tombo
+                festival.
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="floating-exp square"
+            id="exp-ngbuka"
+            style="--size: 420px; left: 38%; top: 36%"
+          >
+            <div>
+              <div class="title">Fullstack Engineer</div>
+              <div class="company">Ngbuka Nigeria</div>
+              <div class="dates">April 2025 – September 2025</div>
+              <hr class="my-2 border-white/5" />
+              <ul class="text-gray-300 space-y-2 text-sm list-disc list-inside">
+                <li>
+                  Led deployment of multiple server updates and key backend
+                  features, including dynamic location calculations based on
+                  user coordinates.
+                </li>
+                <li>
+                  Developed authentication endpoints and enhanced the PostgreSQL
+                  staging database with expanded seed data.
+                </li>
+                <li>
+                  Shipped a complete UI overhaul to modernize the company web
+                  application.
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div
+            class="floating-exp square"
+            id="exp-stem"
+            style="--size: 300px; left: 70%; top: 10%"
+          >
+            <div>
+              <div class="title">Python Instructor</div>
+              <div class="company">STEMCafe</div>
+              <div class="dates">November 2024 – September 2025</div>
+              <hr class="my-2 border-white/5" />
+              <div class="text-gray-300 text-sm">
+                I taught the standard python library to highschoolers and also
+                built a couple of projects in robotics using the raspberrypi.
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
       <!-- Projects Section -->
       <section id="projects" class="mb-20">
-        <h2 class="text-4xl font-bold text-center mb-12 text-white">My Work</h2>
+        <h2 class="text-4xl font-bold text-center mb-12 text-white">
+          My Projects
+        </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           <!-- New Project Card: Tic-Tac-Toe App -->
           <div
@@ -176,7 +987,7 @@
                 class="w-full my-4 rounded-lg border border-gray-600"
               >
                 <source src="videos/2025-09-0315-14-42.mp4" type="video/mp4" />
-                Your browser does not support the video tag.
+                <!-- Your browser does not support the video tag. -->
               </video>
               <p class="text-gray-400 text-sm italic mt-2">
                 A personal project in TypeScript, testing the application of
@@ -184,9 +995,90 @@
                 distances.
               </p>
             </div>
+            <div class="flex space-x-4 mt-4">
+              <a
+                href="#"
+                class="bg-slate-800 hover:bg-slate-700 border border-slate-600 hover:border-slate-500 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
+                >View Project</a
+              >
+              <a
+                href="https://github.com/jazzvillainy/sticktackto"
+                target="_blank"
+                class="bg-gray-700 hover:bg-gray-800 text-white font-medium py-2 px-4 rounded-md transition-colors duration-300"
+                >GitHub</a
+              >
+            </div>
           </div>
 
           <!-- Existing Projects below -->
+
+          <!-- NEW PROJECT CARD: Valenciaga (Ion Valency Matcher) -->
+          <div
+            class="project-card rounded-lg p-6 shadow-xl border border-gray-700"
+          >
+            <div>
+              <h3 class="text-2xl font-semibold mb-2 text-white">Valenciaga</h3>
+              <img
+                src="images/valenciaga.png"
+                alt="Valenciaga project screenshot"
+                class="w-full my-4 rounded-lg border border-gray-600 object-cover"
+              />
+              <p class="text-gray-400 text-sm italic mt-2">
+                A vibecoded learning tool built with pure HTML and JavaScript.
+                It helps users learn chemical composition by matching ion
+                valencies to correctly form compounds.
+              </p>
+            </div>
+            <div class="flex space-x-4 mt-4">
+              <a
+                href="https://jazzvillainy.github.io/Valenciaga/"
+                target="_blank"
+                class="bg-slate-800 hover:bg-slate-700 border border-slate-600 hover:border-slate-500 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
+                >View Project</a
+              >
+              <a
+                href="https://github.com/jazzvillainy/Valenciaga.git"
+                target="_blank"
+                class="bg-gray-700 hover:bg-gray-800 text-white font-medium py-2 px-4 rounded-md transition-colors duration-300"
+                >GitHub</a
+              >
+            </div>
+          </div>
+
+          <!-- NEW PROJECT CARD: Vocabulary Tracker (AI Integrated) -->
+          <div
+            class="project-card rounded-lg p-6 shadow-xl border border-gray-700"
+          >
+            <div>
+              <h3 class="text-2xl font-semibold mb-2 text-white">
+                Vocabulary Tracker (AI Integrated)
+              </h3>
+              <img
+                src="images/vocapp.png"
+                alt="Vocabulary Tracker (VocApp) screenshot"
+                class="w-full my-4 rounded-lg border border-gray-600 object-cover"
+              />
+              <p class="text-gray-400 text-sm italic mt-2">
+                An advanced vocabulary tracking application built with
+                TypeScript. It allows users to record the context in which a new
+                word was encountered, and utilizes **AI integration** to provide
+                informed details, including refined meanings and contextual
+                example sentences, boosting comprehensive word mastery.
+              </p>
+            </div>
+            <div class="flex space-x-4 mt-4">
+              <a
+                href="#"
+                class="bg-slate-800 hover:bg-slate-700 border border-slate-600 hover:border-slate-500 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
+                >View Project</a
+              >
+              <a
+                href="#"
+                class="bg-gray-700 hover:bg-gray-800 text-white font-medium py-2 px-4 rounded-md transition-colors duration-300"
+                >GitHub</a
+              >
+            </div>
+          </div>
 
           <!-- New Project Card: E-commerce & Delivery App -->
           <div
@@ -203,9 +1095,9 @@
             </div>
             <div class="flex space-x-4">
               <a
-                href="http://148.135.78.165:4001/"
+                href="https://app.ngbuka.com/"
                 target="_blank"
-                class="bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-300"
+                class="bg-slate-800 hover:bg-slate-700 border border-slate-600 hover:border-slate-500 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
                 >View Project</a
               >
               <a
@@ -232,7 +1124,7 @@
               <a
                 href="https://notes-zeta-one.vercel.app/"
                 target="_blank"
-                class="bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-300"
+                class="bg-slate-800 hover:bg-slate-700 border border-slate-600 hover:border-slate-500 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
                 >View Project</a
               >
               <a
@@ -261,7 +1153,7 @@
               <a
                 href="https://jazzvillainy.github.io/abercrombieandfitch/#/"
                 target="_blank"
-                class="bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-300"
+                class="bg-slate-800 hover:bg-slate-700 border border-slate-600 hover:border-slate-500 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
                 >View Project</a
               >
               <a
@@ -290,7 +1182,7 @@
               <a
                 href="https://foodrecipeapp-umber.vercel.app/"
                 target="_blank"
-                class="bg-purple-600 hover:bg-purple-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-300"
+                class="bg-slate-800 hover:bg-slate-700 border border-slate-600 hover:border-slate-500 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
                 >View Project</a
               >
               <a
@@ -305,34 +1197,93 @@
       </section>
 
       <!-- Contact Section -->
-      <section id="contact" class="mb-20 text-center py-20">
-        <h2 class="text-4xl font-bold mb-6 text-white">Get In Touch</h2>
-        <p class="text-lg text-gray-400 mb-2 max-w-xl mx-auto">
-          I'm always open to new opportunities and collaborations. Feel free to
-          reach out!
+      <section id="contact" class="mb-20 py-20">
+        <!-- <h2 class="text-4xl font-bold mb-2 text-white text-center">
+          Get In Touch
+        </h2> -->
+        <p class="contact-intro">
+          I'm always open to new opportunities and collaborations. Reach out via
+          any of the channels below!
         </p>
-        <p class="text-lg text-gray-400 mb-8 max-w-xl mx-auto">
-          Aggrey Road, Port Harcourt<br />
-          07013492187, 08108983675
-        </p>
-        <div class="flex justify-center space-x-6 text-2xl">
-          <a
-            href="mailto:crescentdede@gmail.com"
-            class="text-gray-300 hover:text-white transition-colors duration-300"
-            >Email</a
-          >
-          <a
-            href="https://www.linkedin.com/in/crescent-dede-733795123"
-            target="_blank"
-            class="text-gray-300 hover:text-white transition-colors duration-300"
-            >LinkedIn</a
-          >
-          <a
-            href="https://github.com/jazzvillainy"
-            target="_blank"
-            class="text-gray-300 hover:text-white transition-colors duration-300"
-            >GitHub</a
-          >
+
+        <div class="contact-grid">
+          <!-- Email Card -->
+          <div class="contact-card">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M3 8l8.89 5.26a2 2 0 0 0 2.22 0L21 8M3 8v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8"
+                />
+              </svg>
+            </div>
+            <div class="contact-label">Email</div>
+            <a href="mailto:crescentdede@gmail.com" class="contact-link"
+              >crescentdede@gmail.com</a
+            >
+          </div>
+
+          <!-- Location Card -->
+          <div class="contact-card">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M12 2C7.58 2 4 5.58 4 10c0 5.25 8 13 8 13s8-7.75 8-13c0-4.42-3.58-8-8-8zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6z"
+                />
+              </svg>
+            </div>
+            <div class="contact-label">Location</div>
+            <div class="contact-link">Aggrey Road<br />Port Harcourt</div>
+          </div>
+
+          <!-- Phone Card -->
+          <div class="contact-card">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
+                />
+              </svg>
+            </div>
+            <div class="contact-label">Phone</div>
+            <div class="contact-link">+234 810 898 3675</div>
+          </div>
+
+          <!-- LinkedIn Card -->
+          <div class="contact-card">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"
+                />
+                <circle cx="4" cy="4" r="2" />
+              </svg>
+            </div>
+            <div class="contact-label">LinkedIn</div>
+            <a
+              href="https://www.linkedin.com/in/crescent-dede-733795123"
+              target="_blank"
+              class="contact-link"
+              >Connect</a
+            >
+          </div>
+
+          <!-- GitHub Card -->
+          <div class="contact-card">
+            <div class="contact-icon">
+              <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.17 6.839 9.49.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.891 1.529 2.341 1.545 2.914 1.179.092-.916.349-1.545.635-1.9-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0 1 12 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.31.678.921.678 1.856 0 1.338-.012 2.419-.012 2.747 0 .268.18.578.688.48C19.138 20.167 22 16.418 22 12c0-5.523-4.477-10-10-10z"
+                />
+              </svg>
+            </div>
+            <div class="contact-label">GitHub</div>
+            <a
+              href="https://github.com/jazzvillainy"
+              target="_blank"
+              class="contact-link"
+              >Follow</a
+            >
+          </div>
         </div>
       </section>
     </main>
@@ -353,13 +1304,360 @@
         });
       });
 
-      // Mobile menu toggle
-      const mobileMenuButton = document.getElementById("mobile-menu-button");
-      const mobileMenu = document.getElementById("mobile-menu");
+      // Mobile menu handling: support legacy full-screen menu and new compact dropdown
+      (function () {
+        const legacyButton = document.getElementById("mobile-menu-button");
+        const legacyMenu = document.getElementById("mobile-menu");
+        if (legacyButton && legacyMenu) {
+          legacyButton.addEventListener("click", () => {
+            const isOpen = legacyMenu.classList.toggle("open");
+            legacyMenu.setAttribute("aria-hidden", String(!isOpen));
+          });
+          legacyMenu.querySelectorAll("a").forEach((link) => {
+            link.addEventListener("click", () => {
+              legacyMenu.classList.remove("open");
+              legacyMenu.setAttribute("aria-hidden", "true");
+            });
+          });
+        }
 
-      mobileMenuButton.addEventListener("click", () => {
-        mobileMenu.classList.toggle("hidden");
-      });
+        // New compact dropdown attached to the hamburger
+        const hamburger = document.getElementById("mobile-hamburger");
+        const dropdown = document.getElementById("mobile-dropdown");
+        if (!hamburger || !dropdown) return;
+
+        const closeDropdown = () => {
+          dropdown.classList.remove("open");
+          dropdown.setAttribute("aria-hidden", "true");
+          hamburger.setAttribute("aria-expanded", "false");
+        };
+
+        hamburger.addEventListener("click", (ev) => {
+          ev.stopPropagation();
+          const isOpen = dropdown.classList.toggle("open");
+          dropdown.setAttribute("aria-hidden", String(!isOpen));
+          hamburger.setAttribute("aria-expanded", String(isOpen));
+        });
+
+        // Close when clicking outside
+        document.addEventListener("click", (ev) => {
+          if (!dropdown.contains(ev.target) && !hamburger.contains(ev.target)) {
+            closeDropdown();
+          }
+        });
+
+        // Close when selecting a link inside the dropdown
+        dropdown.querySelectorAll("a").forEach((link) => {
+          link.addEventListener("click", () => closeDropdown());
+        });
+      })();
+
+      // About section 'Read more' toggle
+      (function () {
+        const aboutToggle = document.getElementById("aboutToggle");
+        const aboutBlurb = document.querySelector(".about-blurb");
+        if (!aboutToggle || !aboutBlurb) return;
+
+        aboutToggle.addEventListener("click", () => {
+          const isExpanded = aboutBlurb.classList.toggle("expanded");
+          aboutToggle.setAttribute("aria-expanded", String(isExpanded));
+          aboutToggle.textContent = isExpanded ? "Show less" : "Read more";
+        });
+      })();
+
+      // Smoothly animate background scaling on scroll to avoid sudden jumps
+      (function () {
+        const doc = document.documentElement;
+        let lastScrollY = window.scrollY || window.pageYOffset;
+        let targetScale = 1;
+        let currentScale = 1;
+        const maxScale = 1.03; // small maximum zoom
+        const minScale = 1; // don't shrink below 1
+        const ease = 0.08; // smoothing factor (lower = smoother)
+
+        function updateTarget() {
+          const scrollY = window.scrollY || window.pageYOffset;
+          // Map scroll position to a subtle scale factor
+          // We'll use a small fraction of the total scroll (clamped)
+          const docHeight = Math.max(
+            doc.scrollHeight,
+            document.body.scrollHeight
+          );
+          const viewport = window.innerHeight || doc.clientHeight;
+          const maxScrollable = Math.max(docHeight - viewport, 1);
+          const pct = Math.min(scrollY / maxScrollable, 1);
+          // scale varies from minScale to maxScale proportionally
+          targetScale = minScale + (maxScale - minScale) * pct;
+        }
+
+        function tick() {
+          // interpolate currentScale toward targetScale
+          currentScale += (targetScale - currentScale) * ease;
+          // apply to root body CSS variable
+          document.body.style.setProperty("--bg-scale", currentScale);
+          requestAnimationFrame(tick);
+        }
+
+        // throttle updateTarget to animation frames
+        let ticking = false;
+        window.addEventListener(
+          "scroll",
+          () => {
+            if (!ticking) {
+              window.requestAnimationFrame(() => {
+                updateTarget();
+                ticking = false;
+              });
+              ticking = true;
+            }
+          },
+          { passive: true }
+        );
+
+        // initialize
+        updateTarget();
+        tick();
+      })();
+
+      // Floating experience items animation (motion + collisions)
+      (function () {
+        const playfield = document.getElementById("experience-playfield");
+        if (!playfield) return; // nothing to animate
+
+        let items = Array.from(playfield.querySelectorAll(".floating-exp"));
+
+        // Whether to animate - enable on all screen sizes to allow mobile physics
+        function shouldAnimate() {
+          return true;
+        }
+
+        // initialize state
+        const state = [];
+
+        function init() {
+          items = Array.from(playfield.querySelectorAll(".floating-exp"));
+          const pfRect = playfield.getBoundingClientRect();
+          state.length = 0;
+          items.forEach((el, i) => {
+            // reset
+            el.style.left = "0px";
+            el.style.top = "0px";
+            el.style.transform = "translate(0px, 0px)";
+
+            const w = el.offsetWidth;
+            const h = el.offsetHeight;
+            // random initial placement inside playfield
+            const x = Math.random() * Math.max(0, pfRect.width - w);
+            const y = Math.random() * Math.max(0, pfRect.height - h);
+            // faster initial velocities
+            const speedFactor = 1.6;
+            const vx = (Math.random() * 2 - 1) * 0.8 * speedFactor; // px/frame
+            const vy = (Math.random() * 2 - 1) * 0.8 * speedFactor;
+            const mass = Math.max(0.5, (w * h) / 1500);
+            const obj = {
+              el,
+              x,
+              y,
+              vx,
+              vy,
+              w,
+              h,
+              mass,
+              dragging: false,
+              lastPointer: null,
+            };
+
+            // pointer drag handlers: enable dragging (no pulsate)
+            el.addEventListener("pointerdown", (ev) => {
+              if (!shouldAnimate()) return;
+              try {
+                el.setPointerCapture(ev.pointerId);
+              } catch (e) {}
+              obj.dragging = true;
+              obj.lastPointer = {
+                x: ev.clientX,
+                y: ev.clientY,
+                t: performance.now(),
+              };
+              obj.dragOffset = {
+                x: ev.clientX - (pfRect.left + obj.x),
+                y: ev.clientY - (pfRect.top + obj.y),
+              };
+            });
+
+            el.addEventListener("pointermove", (ev) => {
+              if (!obj.dragging) return;
+              const now = performance.now();
+              const dx = ev.clientX - obj.lastPointer.x;
+              const dy = ev.clientY - obj.lastPointer.y;
+              const dt = Math.max(8, now - obj.lastPointer.t);
+              // update position to follow pointer (respect playfield)
+              const pfRectNow = playfield.getBoundingClientRect();
+              let nx = ev.clientX - pfRectNow.left - obj.dragOffset.x;
+              let ny = ev.clientY - pfRectNow.top - obj.dragOffset.y;
+              nx = Math.max(0, Math.min(nx, pfRectNow.width - obj.w));
+              ny = Math.max(0, Math.min(ny, pfRectNow.height - obj.h));
+              obj.x = nx;
+              obj.y = ny;
+              // compute velocity from pointer movement
+              obj.vx = (dx / dt) * 18; // scale to px/frame
+              obj.vy = (dy / dt) * 18;
+              obj.lastPointer = { x: ev.clientX, y: ev.clientY, t: now };
+            });
+
+            el.addEventListener("pointerup", (ev) => {
+              if (!obj.dragging) return;
+              try {
+                el.releasePointerCapture(ev.pointerId);
+              } catch (e) {}
+              obj.dragging = false;
+              // small boost on release so it 'throws'
+              obj.vx *= 1.1;
+              obj.vy *= 1.1;
+            });
+            el.addEventListener("pointercancel", () => {
+              obj.dragging = false;
+            });
+
+            state.push(obj);
+          });
+        }
+
+        let running = false;
+        let rafId = null;
+
+        function step() {
+          const pfRect = playfield.getBoundingClientRect();
+          const width = pfRect.width;
+          const height = pfRect.height;
+
+          // update positions
+          for (let i = 0; i < state.length; i++) {
+            const a = state[i];
+            if (a.dragging) continue; // position is driven by pointer
+            a.x += a.vx;
+            a.y += a.vy;
+
+            // wall collisions
+            if (a.x < 0) {
+              a.x = 0;
+              a.vx *= -1;
+            }
+            if (a.y < 0) {
+              a.y = 0;
+              a.vy *= -1;
+            }
+            if (a.x + a.w > width) {
+              a.x = width - a.w;
+              a.vx *= -1;
+            }
+            if (a.y + a.h > height) {
+              a.y = height - a.h;
+              a.vy *= -1;
+            }
+          }
+
+          // pairwise collisions (AABB) — impulse response
+          for (let i = 0; i < state.length; i++) {
+            for (let j = i + 1; j < state.length; j++) {
+              const A = state[i];
+              const B = state[j];
+              if (
+                A.x < B.x + B.w &&
+                A.x + A.w > B.x &&
+                A.y < B.y + B.h &&
+                A.y + A.h > B.y
+              ) {
+                const nx = A.x + A.w / 2 - (B.x + B.w / 2);
+                const ny = A.y + A.h / 2 - (B.y + B.h / 2);
+                const dist = Math.max(1, Math.hypot(nx, ny));
+                const ux = nx / dist;
+                const uy = ny / dist;
+                const rvx = A.vx - B.vx;
+                const rvy = A.vy - B.vy;
+                const rel = rvx * ux + rvy * uy;
+                if (rel < 0) {
+                  const e = 0.85; // slightly softer
+                  const jimp = (-(1 + e) * rel) / (1 / A.mass + 1 / B.mass);
+                  const jx = jimp * ux;
+                  const jy = jimp * uy;
+                  A.vx += jx / A.mass;
+                  A.vy += jy / A.mass;
+                  B.vx -= jx / B.mass;
+                  B.vy -= jy / B.mass;
+                }
+                // separate to reduce sticking
+                const overlapX = Math.min(A.x + A.w - B.x, B.x + B.w - A.x);
+                const overlapY = Math.min(A.y + A.h - B.y, B.y + B.h - A.y);
+                if (overlapX < overlapY) {
+                  const shift = overlapX / 2 + 0.5;
+                  if (A.x < B.x) {
+                    A.x -= shift;
+                    B.x += shift;
+                  } else {
+                    A.x += shift;
+                    B.x -= shift;
+                  }
+                } else {
+                  const shift = overlapY / 2 + 0.5;
+                  if (A.y < B.y) {
+                    A.y -= shift;
+                    B.y += shift;
+                  } else {
+                    A.y += shift;
+                    B.y -= shift;
+                  }
+                }
+              }
+            }
+          }
+
+          // apply transforms and damping
+          for (let i = 0; i < state.length; i++) {
+            const s = state[i];
+            s.el.style.transform = `translate(${Math.round(
+              s.x
+            )}px, ${Math.round(s.y)}px)`;
+            if (!s.dragging) {
+              s.vx *= 0.992;
+              s.vy *= 0.992;
+            }
+          }
+
+          rafId = requestAnimationFrame(step);
+        }
+
+        function start() {
+          if (running) return;
+          running = true;
+          init();
+          rafId = requestAnimationFrame(step);
+        }
+        function stop() {
+          running = false;
+          if (rafId) cancelAnimationFrame(rafId);
+          rafId = null;
+        }
+
+        // enable/disable based on screen size
+        function handleResize() {
+          if (shouldAnimate()) {
+            start();
+          } else {
+            stop();
+            // reset inline transforms so items flow naturally
+            items.forEach((el) => {
+              el.style.transform = "none";
+              el.style.left = "";
+              el.style.top = "";
+            });
+          }
+        }
+
+        window.addEventListener("resize", handleResize);
+        // kick off
+        handleResize();
+      })();
     </script>
   </body>
 </html>
