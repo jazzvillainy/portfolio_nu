@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -30,10 +30,8 @@
         position: fixed;
         inset: 0;
         z-index: -1;
-        background: linear-gradient(
-            rgba(26, 26, 46, 0.6),
-            rgba(26, 26, 46, 0.6)
-          ),
+        background:
+          linear-gradient(rgba(26, 26, 46, 0.6), rgba(26, 26, 46, 0.6)),
           url("images/0785bbdbb011c8f4d27dd5cd788b3f7a.jpg") center/cover
             no-repeat;
         background-size: cover;
@@ -57,8 +55,10 @@
         max-height: 0;
         opacity: 0;
         transform: translateY(-8px);
-        transition: max-height 320ms cubic-bezier(0.2, 0.9, 0.3, 1),
-          opacity 220ms ease, transform 260ms cubic-bezier(0.2, 0.9, 0.3, 1);
+        transition:
+          max-height 320ms cubic-bezier(0.2, 0.9, 0.3, 1),
+          opacity 220ms ease,
+          transform 260ms cubic-bezier(0.2, 0.9, 0.3, 1);
         will-change: max-height, opacity, transform;
       }
       #mobile-menu.open {
@@ -90,7 +90,8 @@
         opacity: 0;
         transform: translateY(-6px) scale(0.98);
         pointer-events: none;
-        transition: opacity 180ms ease,
+        transition:
+          opacity 180ms ease,
           transform 180ms cubic-bezier(0.2, 0.9, 0.3, 1);
       }
       .mobile-dropdown.open {
@@ -127,7 +128,10 @@
         color: #cfd3e8;
         padding: 0.6rem 0;
         border-radius: 8px;
-        transition: background-color 180ms, color 180ms, transform 180ms;
+        transition:
+          background-color 180ms,
+          color 180ms,
+          transform 180ms;
       }
       #mobile-menu .menu-links a:hover {
         background: rgba(255, 255, 255, 0.02);
@@ -155,8 +159,10 @@
         -webkit-backdrop-filter: blur(8px) saturate(120%);
         border: 1px solid rgba(255, 255, 255, 0.06);
         box-shadow: 0 6px 18px rgba(2, 6, 23, 0.45);
-        transition: transform 0.28s cubic-bezier(0.2, 0.9, 0.3, 1),
-          box-shadow 0.28s, background-color 0.28s;
+        transition:
+          transform 0.28s cubic-bezier(0.2, 0.9, 0.3, 1),
+          box-shadow 0.28s,
+          background-color 0.28s;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
@@ -305,7 +311,9 @@
       .about-blurb > * {
         opacity: 1;
         transform: translateY(0px);
-        transition: opacity 320ms ease, transform 320ms ease;
+        transition:
+          opacity 320ms ease,
+          transform 320ms ease;
       }
       .about-blurb.expanded > * {
         opacity: 1;
@@ -320,7 +328,9 @@
         height: 3rem;
         background: linear-gradient(transparent, rgba(26, 26, 46, 0.9));
         pointer-events: none;
-        transition: opacity 220ms ease, visibility 220ms linear;
+        transition:
+          opacity 220ms ease,
+          visibility 220ms linear;
       }
       .about-blurb.expanded::after {
         opacity: 0;
@@ -501,7 +511,9 @@
         position: absolute;
         will-change: transform;
         cursor: grab;
-        transition: box-shadow 200ms ease, transform 160ms ease;
+        transition:
+          box-shadow 200ms ease,
+          transform 160ms ease;
         display: flex;
         align-items: flex-start;
         justify-content: flex-start;
@@ -617,6 +629,195 @@
           text-align: center;
         }
       }
+
+      /* Projects Carousel Styles */
+      .projects-carousel {
+        position: relative;
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+      }
+      .carousel-container {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+      }
+      .carousel-track {
+        display: flex;
+        transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.3, 1);
+      }
+      .carousel-slide {
+        min-width: 100%;
+        flex-shrink: 0;
+        padding: 0 1rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .carousel-indicators {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-top: 2rem;
+      }
+      .carousel-indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.3);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+      .carousel-indicator.active {
+        background: rgba(124, 58, 237, 0.8);
+        transform: scale(1.3);
+      }
+      .carousel-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(124, 58, 237, 0.2);
+        border: 1px solid rgba(124, 58, 237, 0.3);
+        color: #e8e8ff;
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        z-index: 10;
+      }
+      .carousel-nav:hover {
+        background: rgba(124, 58, 237, 0.5);
+        border-color: rgba(124, 58, 237, 0.6);
+        transform: translateY(-50%) scale(1.1);
+      }
+      .carousel-prev {
+        left: 0;
+      }
+      .carousel-next {
+        right: 0;
+      }
+
+      /* Basic Card Styles */
+      .basic-card {
+        background: linear-gradient(
+          135deg,
+          rgba(46, 46, 78, 0.4),
+          rgba(30, 30, 60, 0.3)
+        );
+        backdrop-filter: blur(12px) saturate(120%);
+        -webkit-backdrop-filter: blur(12px) saturate(120%);
+        border: 1px solid rgba(124, 58, 237, 0.2);
+        border-radius: 16px;
+        padding: 2.5rem;
+        min-height: 400px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        color: #e0e0e0;
+        transition: all 0.3s ease;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        width: 100%;
+        max-width: 50dvw;
+        min-width: 0;
+        overflow: hidden;
+      }
+      .basic-card:hover {
+        background: linear-gradient(
+          135deg,
+          rgba(46, 46, 78, 0.6),
+          rgba(30, 30, 60, 0.5)
+        );
+        border-color: rgba(124, 58, 237, 0.4);
+        box-shadow: 0 12px 48px rgba(124, 58, 237, 0.15);
+      }
+      .card-header {
+        margin-bottom: 1.5rem;
+      }
+      .card-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #ffffff;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(90deg, #e8e8ff 0%, #c8c8ff 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .card-subtitle {
+        font-size: 0.95rem;
+        color: #a0a0d0;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+      }
+      .card-description {
+        font-size: 1rem;
+        line-height: 1.8;
+        color: #d0d0e0;
+        margin-bottom: 1.5rem;
+        flex-grow: 1;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        hyphens: auto;
+        white-space: normal;
+        width: 100%;
+      }
+      .card-links {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+      .card-link {
+        display: inline-block;
+        padding: 0.6rem 1.2rem;
+        background: linear-gradient(
+          90deg,
+          rgba(124, 58, 237, 0.15),
+          rgba(168, 85, 247, 0.1)
+        );
+        border: 1px solid rgba(124, 58, 237, 0.3);
+        color: #e8e8ff;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+      }
+      .card-link:hover {
+        background: linear-gradient(
+          90deg,
+          rgba(124, 58, 237, 0.3),
+          rgba(168, 85, 247, 0.2)
+        );
+        border-color: rgba(124, 58, 237, 0.6);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+      }
+      @media (max-width: 768px) {
+        .basic-card {
+          padding: 1.5rem;
+          min-height: 350px;
+        }
+        .card-title {
+          font-size: 1.5rem;
+        }
+        .card-description {
+          font-size: 0.95rem;
+        }
+      }
+      @media (max-width: 768px) {
+        .carousel-nav {
+          width: 40px;
+          height: 40px;
+        }
+        .carousel-slide {
+          padding: 0 0.5rem;
+        }
+      }
     </style>
   </head>
   <body class="antialiased">
@@ -645,10 +846,8 @@
           class="absolute inset-0"
           style="
             opacity: 0.04;
-            background-image: linear-gradient(
-                rgba(20, 23, 28, 0.08) 1px,
-                transparent 1px
-              ),
+            background-image:
+              linear-gradient(rgba(20, 23, 28, 0.08) 1px, transparent 1px),
               linear-gradient(
                 90deg,
                 rgba(20, 23, 28, 0.08) 1px,
@@ -903,63 +1102,58 @@
           <!-- Floating experience items: JS will animate these to move and bounce -->
           <div
             class="floating-exp square"
-            id="exp-olotu"
-            style="--size: 320px; left: 8%; top: 12%"
-          >
-            <div>
-              <div class="title">Fullstack Trainee</div>
-              <div class="company">Olotu Square Software</div>
-              <div class="dates">April 2023</div>
-              <hr class="my-2 border-white/5" />
-              <div class="text-gray-300 text-sm">
-                Worked on a collaborative project – ticketing web app for Tombo
-                festival.
-              </div>
-            </div>
-          </div>
-
-          <div
-            class="floating-exp square"
-            id="exp-ngbuka"
-            style="--size: 420px; left: 38%; top: 36%"
-          >
-            <div>
-              <div class="title">Fullstack Engineer</div>
-              <div class="company">Ngbuka Nigeria</div>
-              <div class="dates">April 2025 – September 2025</div>
-              <hr class="my-2 border-white/5" />
-              <ul class="text-gray-300 space-y-2 text-sm list-disc list-inside">
-                <li>
-                  Led deployment of multiple server updates and key backend
-                  features, including dynamic location calculations based on
-                  user coordinates.
-                </li>
-                <li>
-                  Developed authentication endpoints and enhanced the PostgreSQL
-                  staging database with expanded seed data.
-                </li>
-                <li>
-                  Shipped a complete UI overhaul to modernize the company web
-                  application.
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div
-            class="floating-exp square"
             id="exp-stem"
-            style="--size: 300px; left: 70%; top: 10%"
+            style="--size: 320px; left: 8%; top: 12%"
           >
             <div>
               <div class="title">Python Instructor</div>
               <div class="company">STEMCafe</div>
-              <div class="dates">November 2024 – September 2025</div>
+              <div class="dates">November 2024 - September 2025</div>
               <hr class="my-2 border-white/5" />
               <div class="text-gray-300 text-sm">
-                I taught the standard python library to highschoolers and also
-                built a couple of projects in robotics using the raspberrypi.
+                Groomed young talents on the std python library and micropy for
+                Raspberry pi pico.
               </div>
+            </div>
+          </div>
+
+          <div
+            class="floating-exp square"
+            id="exp-nguka"
+            style="--size: 420px; left: 38%; top: 36%"
+          >
+            <div>
+              <div class="title">Fullstack Engineer</div>
+              <div class="company">Nguka Nigeria</div>
+              <div class="dates">April 2025 – September 2025</div>
+              <hr class="my-2 border-white/5" />
+              <ul class="text-gray-300 space-y-2 text-sm list-disc list-inside">
+                <li>
+                  Led the deployment of 5+ production server updates, delivering
+                  dynamic geolocation features based on user coordinates,
+                  improving location accuracy by 40% and reducing related system
+                  errors by 30%.
+                </li>
+                <li>
+                  Designed and implemented secure authentication endpoints using
+                  JWT and REST principles; expanded PostgreSQL staging seed data
+                  by 3×, accelerating QA workflows and reducing environment
+                  setup time by 50%.
+                </li>
+                <li>
+                  Introduced an automated CI/CD pipeline using GitHub Actions,
+                  eliminating manual deployment steps, reducing deployment time
+                  by 60%, and decreasing production deployment errors by 70%,
+                  while increasing release frequency from monthly to weekly.
+                </li>
+                <li>
+                  Established an automated testing framework using Jest (unit
+                  testing), Supertest (API integration testing), and
+                  Postman/Newman for endpoint validation; increased code
+                  coverage to 80%+, reduced regression defects by 45%, and
+                  improved release stability.
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -970,229 +1164,203 @@
         <h2 class="text-4xl font-bold text-center mb-12 text-white">
           My Projects
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          <!-- New Project Card: Tic-Tac-Toe App -->
-          <div
-            class="project-card rounded-lg p-6 shadow-xl border border-gray-700"
-          >
-            <div>
-              <h3 class="text-2xl font-semibold mb-2 text-white">
-                Real-Time Tic-Tac-Toe
-              </h3>
-              <!-- This video tag replaces the video-placeholder div. -->
-              <!-- Place your video file "Vite + React + TS - Google Chrome 2025-09-03 15-14-42.mp4" in a 'videos' folder in the same directory as this HTML file. -->
-              <video
-                controls
-                loop
-                class="w-full my-4 rounded-lg border border-gray-600"
-              >
-                <source src="videos/2025-09-0315-14-42.mp4" type="video/mp4" />
-                <!-- Your browser does not support the video tag. -->
-              </video>
-              <p class="text-gray-400 text-sm italic mt-2">
-                A personal project in TypeScript, testing the application of
-                WebSockets for real-time updates between players across
-                distances.
-              </p>
-            </div>
-            <div class="flex space-x-4 mt-4">
-              <a
-                href="#"
-                class="bg-slate-800 hover:bg-slate-700 border border-slate-600 hover:border-slate-500 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
-                >View Project</a
-              >
-              <a
-                href="https://github.com/jazzvillainy/sticktackto"
-                target="_blank"
-                class="bg-gray-700 hover:bg-gray-800 text-white font-medium py-2 px-4 rounded-md transition-colors duration-300"
-                >GitHub</a
-              >
-            </div>
-          </div>
+        <div class="projects-carousel">
+          <div class="carousel-container">
+            <div class="carousel-track" id="carouselTrack">
+              <!-- PROJECT CARD: Alleana -->
+              <div class="carousel-slide">
+                <div class="basic-card">
+                  <div class="card-header">
+                    <h3 class="card-title">Alleana</h3>
+                    <p class="card-subtitle">Social Commerce Backend</p>
+                  </div>
+                  <p class="card-description">
+                    Built with Express.js, this modular backend service
+                    demonstrates user authentication, wallet management, and
+                    call signaling logic. It simulates a OnePipe payment
+                    integration for transaction flows and uses JWT-based
+                    authentication for secure access. The project is structured
+                    around a RESTful API with PostgreSQL for data persistence
+                    and Sequelize for ORM.
+                  </p>
+                  <div class="card-links">
+                    <a
+                      href="https://github.com/jazzvillainy/Alleana.git"
+                      target="_blank"
+                      class="card-link"
+                      >GitHub</a
+                    >
+                  </div>
+                </div>
+              </div>
 
-          <!-- Existing Projects below -->
+              <!-- PROJECT CARD: CLoudnotes -->
+              <div class="carousel-slide">
+                <div class="basic-card">
+                  <div class="card-header">
+                    <h3 class="card-title">CLoudnotes</h3>
+                    <p class="card-subtitle">Notes & Task Management</p>
+                  </div>
+                  <p class="card-description">
+                    Cloud-enabled notes and task management app powered by a
+                    Supabase backend. Features separate routes for notes and
+                    todos, designed for organized multi-view usage. Utilized
+                    TanStack Query for efficient ajax and caching, eliminating
+                    excessive useEffect calls and unnecessary renders. Includes
+                    push notifications for todo timers.
+                  </p>
+                  <div class="card-links">
+                    <a
+                      href="https://notesbyjazzvillain.vercel.app/"
+                      target="_blank"
+                      class="card-link"
+                      >View Project</a
+                    >
+                  </div>
+                </div>
+              </div>
 
-          <!-- NEW PROJECT CARD: Valenciaga (Ion Valency Matcher) -->
-          <div
-            class="project-card rounded-lg p-6 shadow-xl border border-gray-700"
-          >
-            <div>
-              <h3 class="text-2xl font-semibold mb-2 text-white">Valenciaga</h3>
-              <img
-                src="images/valenciaga.png"
-                alt="Valenciaga project screenshot"
-                class="w-full my-4 rounded-lg border border-gray-600 object-cover"
-              />
-              <p class="text-gray-400 text-sm italic mt-2">
-                A vibecoded learning tool built with pure HTML and JavaScript.
-                It helps users learn chemical composition by matching ion
-                valencies to correctly form compounds.
-              </p>
-            </div>
-            <div class="flex space-x-4 mt-4">
-              <a
-                href="https://jazzvillainy.github.io/Valenciaga/"
-                target="_blank"
-                class="bg-slate-800 hover:bg-slate-700 border border-slate-600 hover:border-slate-500 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
-                >View Project</a
-              >
-              <a
-                href="https://github.com/jazzvillainy/Valenciaga.git"
-                target="_blank"
-                class="bg-gray-700 hover:bg-gray-800 text-white font-medium py-2 px-4 rounded-md transition-colors duration-300"
-                >GitHub</a
-              >
-            </div>
-          </div>
+              <!-- PROJECT CARD: Ceebeetee Simulator -->
+              <div class="carousel-slide">
+                <div class="basic-card">
+                  <div class="card-header">
+                    <h3 class="card-title">Ceebeetee Simulator</h3>
+                    <p class="card-subtitle">CBT Test Engine API</p>
+                  </div>
+                  <p class="card-description">
+                    Built with Django REST Framework, this API web service
+                    simulates a CBT test engine with advanced features like LLM
+                    integration for automated grading logic. I utilized Django
+                    REST Framework for easy implementation and scalability,
+                    providing a robust backend for test management and
+                    evaluation.
+                  </p>
+                  <div class="card-links">
+                    <a
+                      href="https://github.com/jazzvillainy/test"
+                      target="_blank"
+                      class="card-link"
+                      >GitHub</a
+                    >
+                  </div>
+                </div>
+              </div>
 
-          <!-- NEW PROJECT CARD: Vocabulary Tracker (AI Integrated) -->
-          <div
-            class="project-card rounded-lg p-6 shadow-xl border border-gray-700"
-          >
-            <div>
-              <h3 class="text-2xl font-semibold mb-2 text-white">
-                Vocabulary Tracker (AI Integrated)
-              </h3>
-              <img
-                src="images/vocapp.png"
-                alt="Vocabulary Tracker (VocApp) screenshot"
-                class="w-full my-4 rounded-lg border border-gray-600 object-cover"
-              />
-              <p class="text-gray-400 text-sm italic mt-2">
-                An advanced vocabulary tracking application built with
-                TypeScript. It allows users to record the context in which a new
-                word was encountered, and utilizes **AI integration** to provide
-                informed details, including refined meanings and contextual
-                example sentences, boosting comprehensive word mastery.
-              </p>
-            </div>
-            <div class="flex space-x-4 mt-4">
-              <a
-                href="#"
-                class="bg-slate-800 hover:bg-slate-700 border border-slate-600 hover:border-slate-500 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
-                >View Project</a
-              >
-              <a
-                href="#"
-                class="bg-gray-700 hover:bg-gray-800 text-white font-medium py-2 px-4 rounded-md transition-colors duration-300"
-                >GitHub</a
-              >
-            </div>
-          </div>
+              <!-- PROJECT CARD: StickTackToe -->
+              <div class="carousel-slide">
+                <div class="basic-card">
+                  <div class="card-header">
+                    <h3 class="card-title">StickTackToe</h3>
+                    <p class="card-subtitle">Real-time WebSocket Gaming</p>
+                  </div>
+                  <p class="card-description">
+                    A personal project in TypeScript, testing the application of
+                    WebSockets for real-time updates between players across
+                    distances. The goal was to fully understand the WebSocket
+                    protocol and how to integrate it into an Express/Node
+                    backend for seamless multiplayer interactions.
+                  </p>
+                  <div class="card-links">
+                    <a
+                      href="https://ticktackvillain.vercel.app/"
+                      target="_blank"
+                      class="card-link"
+                      >View Project</a
+                    >
+                  </div>
+                </div>
+              </div>
 
-          <!-- New Project Card: E-commerce & Delivery App -->
-          <div
-            class="project-card rounded-lg p-6 shadow-xl border border-gray-700"
-          >
-            <div>
-              <h3 class="text-2xl font-semibold mb-2 text-white">
-                Ngbuka Delivery Service
-              </h3>
-              <p class="text-gray-400 mb-4">
-                A complete e-commerce and delivery application used to search
-                for service providers like spare parts dealers and mechanics.
-              </p>
-            </div>
-            <div class="flex space-x-4">
-              <a
-                href="https://app.ngbuka.com/"
-                target="_blank"
-                class="bg-slate-800 hover:bg-slate-700 border border-slate-600 hover:border-slate-500 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
-                >View Project</a
-              >
-              <a
-                href="#"
-                target="_blank"
-                class="bg-gray-700 hover:bg-gray-800 text-white font-medium py-2 px-4 rounded-md transition-colors duration-300"
-                >GitHub</a
-              >
-            </div>
-          </div>
+              <!-- PROJECT CARD: Valenciaga -->
+              <div class="carousel-slide">
+                <div class="basic-card">
+                  <div class="card-header">
+                    <h3 class="card-title">Valenciaga</h3>
+                    <p class="card-subtitle">Chemistry Learning Tool</p>
+                  </div>
+                  <p class="card-description">
+                    A vibecoded learning tool built with pure HTML and
+                    JavaScript. It helps users learn chemical composition by
+                    matching ion valencies to correctly form compounds. A
+                    perfect example of how vibe coding could make a significant
+                    impact in tech-assisted education.
+                  </p>
+                  <div class="card-links">
+                    <a
+                      href="https://jazzvillainy.github.io/Valenciaga/"
+                      target="_blank"
+                      class="card-link"
+                      >View Project</a
+                    >
+                    <a
+                      href="https://github.com/jazzvillainy/Valenciaga.git"
+                      target="_blank"
+                      class="card-link"
+                      >GitHub</a
+                    >
+                  </div>
+                </div>
+              </div>
 
-          <!-- Project Card for Notes App -->
-          <div
-            class="project-card rounded-lg p-6 shadow-xl border border-gray-700"
-          >
-            <div>
-              <h3 class="text-2xl font-semibold mb-2 text-white">Notes App</h3>
-              <p class="text-gray-400 mb-4">
-                A dynamic and responsive notes and to-do application. Built with
-                a Supabase backend for seamless data management.
-              </p>
+              <!-- PROJECT CARD: Vocabulary Tracker -->
+              <div class="carousel-slide">
+                <div class="basic-card">
+                  <div class="card-header">
+                    <h3 class="card-title">Vocabulary Tracker</h3>
+                    <p class="card-subtitle">AI-Powered Learning App</p>
+                  </div>
+                  <p class="card-description">
+                    An advanced vocabulary tracking application built with
+                    TypeScript. It allows users to record the context in which a
+                    new word was encountered, and utilizes LLM integration to
+                    provide informed details, including refined meanings and
+                    contextual example sentences for comprehensive word mastery.
+                  </p>
+                  <div class="card-links">
+                    <a
+                      href="https://github.com/jazzvillainy/mf.git"
+                      target="_blank"
+                      class="card-link"
+                      >GitHub</a
+                    >
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="flex space-x-4">
-              <a
-                href="https://notes-zeta-one.vercel.app/"
-                target="_blank"
-                class="bg-slate-800 hover:bg-slate-700 border border-slate-600 hover:border-slate-500 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
-                >View Project</a
+            <button
+              class="carousel-nav carousel-prev"
+              id="prevBtn"
+              aria-label="Previous project"
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
               >
-              <a
-                href="https://github.com/jazzvillainy/todofr.git"
-                target="_blank"
-                class="bg-gray-700 hover:bg-gray-800 text-white font-medium py-2 px-4 rounded-md transition-colors duration-300"
-                >GitHub</a
+                <path d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <button
+              class="carousel-nav carousel-next"
+              id="nextBtn"
+              aria-label="Next project"
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
               >
-            </div>
+                <path d="M9 19l7-7-7-7" />
+              </svg>
+            </button>
           </div>
-
-          <!-- Project Card for Abercrombie & Fitch -->
-          <div
-            class="project-card rounded-lg p-6 shadow-xl border border-gray-700"
-          >
-            <div>
-              <h3 class="text-2xl font-semibold mb-2 text-white">
-                Abercrombie & Fitch E-commerce
-              </h3>
-              <p class="text-gray-400 mb-4">
-                A functional e-commerce application demonstrating front-end
-                development skills with product listings and a shopping cart.
-              </p>
-            </div>
-            <div class="flex space-x-4">
-              <a
-                href="https://jazzvillainy.github.io/abercrombieandfitch/#/"
-                target="_blank"
-                class="bg-slate-800 hover:bg-slate-700 border border-slate-600 hover:border-slate-500 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
-                >View Project</a
-              >
-              <a
-                href="https://github.com/jazzvillainy/abercrombieandfitch"
-                target="_blank"
-                class="bg-gray-700 hover:bg-gray-800 text-white font-medium py-2 px-4 rounded-md transition-colors duration-300"
-                >GitHub</a
-              >
-            </div>
-          </div>
-
-          <!-- Project Card for Recipe App -->
-          <div
-            class="project-card rounded-lg p-6 shadow-xl border border-gray-700"
-          >
-            <div>
-              <h3 class="text-2xl font-semibold mb-2 text-white">
-                Food Recipe App
-              </h3>
-              <p class="text-gray-400 mb-4">
-                An application for discovering and viewing food recipes. Users
-                can search for and explore a variety of dishes.
-              </p>
-            </div>
-            <div class="flex space-x-4">
-              <a
-                href="https://foodrecipeapp-umber.vercel.app/"
-                target="_blank"
-                class="bg-slate-800 hover:bg-slate-700 border border-slate-600 hover:border-slate-500 text-white font-medium py-2 px-4 rounded-md transition-all duration-300"
-                >View Project</a
-              >
-              <a
-                href="https://github.com/jazzvillainy/recipeapp.git"
-                target="_blank"
-                class="bg-gray-700 hover:bg-gray-800 text-white font-medium py-2 px-4 rounded-md transition-colors duration-300"
-                >GitHub</a
-              >
-            </div>
-          </div>
+          <div class="carousel-indicators" id="carouselIndicators"></div>
         </div>
       </section>
 
@@ -1232,7 +1400,7 @@
               </svg>
             </div>
             <div class="contact-label">Location</div>
-            <div class="contact-link">Aggrey Road<br />Port Harcourt</div>
+            <div class="contact-link">Abuja<br />Nigeria</div>
           </div>
 
           <!-- Phone Card -->
@@ -1381,7 +1549,7 @@
           // We'll use a small fraction of the total scroll (clamped)
           const docHeight = Math.max(
             doc.scrollHeight,
-            document.body.scrollHeight
+            document.body.scrollHeight,
           );
           const viewport = window.innerHeight || doc.clientHeight;
           const maxScrollable = Math.max(docHeight - viewport, 1);
@@ -1411,7 +1579,7 @@
               ticking = true;
             }
           },
-          { passive: true }
+          { passive: true },
         );
 
         // initialize
@@ -1616,7 +1784,7 @@
           for (let i = 0; i < state.length; i++) {
             const s = state[i];
             s.el.style.transform = `translate(${Math.round(
-              s.x
+              s.x,
             )}px, ${Math.round(s.y)}px)`;
             if (!s.dragging) {
               s.vx *= 0.992;
@@ -1657,6 +1825,66 @@
         window.addEventListener("resize", handleResize);
         // kick off
         handleResize();
+      })();
+
+      // Projects Carousel functionality
+      (function () {
+        const carouselTrack = document.getElementById("carouselTrack");
+        const prevBtn = document.getElementById("prevBtn");
+        const nextBtn = document.getElementById("nextBtn");
+        const indicatorsContainer =
+          document.getElementById("carouselIndicators");
+
+        if (!carouselTrack) return;
+
+        const slides = Array.from(
+          carouselTrack.querySelectorAll(".carousel-slide"),
+        );
+        let currentIndex = 0;
+
+        // Create indicators
+        slides.forEach((_, index) => {
+          const indicator = document.createElement("div");
+          indicator.className =
+            "carousel-indicator" + (index === 0 ? " active" : "");
+          indicator.addEventListener("click", () => goToSlide(index));
+          indicatorsContainer.appendChild(indicator);
+        });
+
+        const indicators = Array.from(
+          indicatorsContainer.querySelectorAll(".carousel-indicator"),
+        );
+
+        function updateCarouselPosition() {
+          const offset = -currentIndex * 100;
+          carouselTrack.style.transform = `translateX(${offset}%)`;
+
+          indicators.forEach((ind, i) => {
+            ind.classList.toggle("active", i === currentIndex);
+          });
+        }
+
+        function goToSlide(index) {
+          currentIndex = (index + slides.length) % slides.length;
+          updateCarouselPosition();
+        }
+
+        function nextSlide() {
+          goToSlide(currentIndex + 1);
+        }
+
+        function prevSlide() {
+          goToSlide(currentIndex - 1);
+        }
+
+        prevBtn.addEventListener("click", prevSlide);
+        nextBtn.addEventListener("click", nextSlide);
+
+        // Keyboard navigation
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "ArrowLeft") prevSlide();
+          if (e.key === "ArrowRight") nextSlide();
+        });
       })();
     </script>
   </body>
