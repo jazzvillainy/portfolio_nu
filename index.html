@@ -408,10 +408,14 @@
         padding: 0 1rem;
       }
       .contact-card {
-        background: rgba(46, 46, 78, 0.18);
-        backdrop-filter: blur(10px) saturate(120%);
-        -webkit-backdrop-filter: blur(10px) saturate(120%);
-        border: 1px solid rgba(124, 58, 237, 0.15);
+        background: linear-gradient(
+          180deg,
+          rgba(20, 24, 34, 0.6),
+          rgba(8, 10, 18, 0.4)
+        );
+        backdrop-filter: blur(6px) saturate(120%);
+        -webkit-backdrop-filter: blur(6px) saturate(120%);
+        border: 1px solid rgba(255, 255, 255, 0.03);
         border-radius: 12px;
         padding: 1.5rem;
         display: flex;
@@ -421,6 +425,7 @@
         transition: all 280ms cubic-bezier(0.2, 0.9, 0.3, 1);
         position: relative;
         overflow: hidden;
+        box-shadow: 0 10px 30px rgba(2, 6, 23, 0.6);
       }
       .contact-card::before {
         content: "";
@@ -436,10 +441,8 @@
         z-index: 0;
       }
       .contact-card:hover {
-        background: rgba(46, 46, 78, 0.28);
-        border-color: rgba(124, 58, 237, 0.25);
-        transform: translateY(-4px);
-        box-shadow: 0 12px 28px rgba(124, 58, 237, 0.15);
+        box-shadow: 0 18px 44px rgba(2, 6, 23, 0.75);
+        transform: scale(1.02);
       }
       .contact-card:hover::before {
         opacity: 1;
@@ -705,14 +708,14 @@
       /* Basic Card Styles */
       .basic-card {
         background: linear-gradient(
-          135deg,
-          rgba(46, 46, 78, 0.4),
-          rgba(30, 30, 60, 0.3)
+          180deg,
+          rgba(20, 24, 34, 0.6),
+          rgba(8, 10, 18, 0.4)
         );
-        backdrop-filter: blur(12px) saturate(120%);
-        -webkit-backdrop-filter: blur(12px) saturate(120%);
-        border: 1px solid rgba(124, 58, 237, 0.2);
-        border-radius: 16px;
+        backdrop-filter: blur(6px) saturate(120%);
+        -webkit-backdrop-filter: blur(6px) saturate(120%);
+        border: 1px solid rgba(255, 255, 255, 0.03);
+        border-radius: 12px;
         padding: 2.5rem;
         min-height: 400px;
         display: flex;
@@ -720,20 +723,15 @@
         justify-content: space-between;
         color: #e0e0e0;
         transition: all 0.3s ease;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 10px 30px rgba(2, 6, 23, 0.6);
         width: 100%;
         max-width: 50dvw;
         min-width: 0;
         overflow: hidden;
       }
       .basic-card:hover {
-        background: linear-gradient(
-          135deg,
-          rgba(46, 46, 78, 0.6),
-          rgba(30, 30, 60, 0.5)
-        );
-        border-color: rgba(124, 58, 237, 0.4);
-        box-shadow: 0 12px 48px rgba(124, 58, 237, 0.15);
+        box-shadow: 0 18px 44px rgba(2, 6, 23, 0.75);
+        transform: scale(1.02);
       }
       .card-header {
         margin-bottom: 1.5rem;
@@ -1119,41 +1117,71 @@
 
           <div
             class="floating-exp square"
-            id="exp-nguka"
-            style="--size: 420px; left: 38%; top: 36%"
+            id="exp-nguka-1"
+            style="--size: 320px; left: 28%; top: 36%"
           >
             <div>
-              <div class="title">Fullstack Engineer</div>
+              <div class="title">Production Deployment</div>
               <div class="company">Nguka Nigeria</div>
               <div class="dates">April 2025 – September 2025</div>
               <hr class="my-2 border-white/5" />
-              <ul class="text-gray-300 space-y-2 text-sm list-disc list-inside">
-                <li>
-                  Led the deployment of 5+ production server updates, delivering
-                  dynamic geolocation features based on user coordinates,
-                  improving location accuracy by 40% and reducing related system
-                  errors by 30%.
-                </li>
-                <li>
-                  Designed and implemented secure authentication endpoints using
-                  JWT and REST principles; expanded PostgreSQL staging seed data
-                  by 3×, accelerating QA workflows and reducing environment
-                  setup time by 50%.
-                </li>
-                <li>
-                  Introduced an automated CI/CD pipeline using GitHub Actions,
-                  eliminating manual deployment steps, reducing deployment time
-                  by 60%, and decreasing production deployment errors by 70%,
-                  while increasing release frequency from monthly to weekly.
-                </li>
-                <li>
-                  Established an automated testing framework using Jest (unit
-                  testing), Supertest (API integration testing), and
-                  Postman/Newman for endpoint validation; increased code
-                  coverage to 80%+, reduced regression defects by 45%, and
-                  improved release stability.
-                </li>
-              </ul>
+              <div class="text-gray-300 text-sm">
+                Led deployment of 5+ production server updates with dynamic
+                geolocation features. Improved location accuracy by 40% and
+                reduced system errors by 30%.
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="floating-exp square"
+            id="exp-nguka-2"
+            style="--size: 320px; left: 55%; top: 24%"
+          >
+            <div>
+              <div class="title">Auth & Database</div>
+              <div class="company">Nguka Nigeria</div>
+              <div class="dates">April 2025 – September 2025</div>
+              <hr class="my-2 border-white/5" />
+              <div class="text-gray-300 text-sm">
+                Designed secure JWT authentication endpoints. Expanded
+                PostgreSQL seed data by 3×, reducing QA setup time by 50%.
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="floating-exp square"
+            id="exp-nguka-3"
+            style="--size: 320px; left: 8%; top: 60%"
+          >
+            <div>
+              <div class="title">CI/CD Pipeline</div>
+              <div class="company">Nguka Nigeria</div>
+              <div class="dates">April 2025 – September 2025</div>
+              <hr class="my-2 border-white/5" />
+              <div class="text-gray-300 text-sm">
+                Implemented GitHub Actions pipeline, reducing deployment time by
+                60% and errors by 70%. Increased release frequency from monthly
+                to weekly.
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="floating-exp square"
+            id="exp-nguka-4"
+            style="--size: 320px; left: 45%; top: 70%"
+          >
+            <div>
+              <div class="title">Testing Framework</div>
+              <div class="company">Nguka Nigeria</div>
+              <div class="dates">April 2025 – September 2025</div>
+              <hr class="my-2 border-white/5" />
+              <div class="text-gray-300 text-sm">
+                Established Jest, Supertest, and Postman/Newman testing
+                framework. Achieved 80%+ code coverage, reduced defects by 45%.
+              </div>
             </div>
           </div>
         </div>
